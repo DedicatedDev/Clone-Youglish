@@ -9,10 +9,13 @@ export class YoutubeManager {
   private paginationInfo?: youtubeSearch.YouTubeSearchPageResults;
   private query: string = "";
   private searchOpts: youtubeSearch.YouTubeSearchOptions = {
-    maxResults: 1000,
-    key: "AIzaSyADOZ4h6gjzG50k89FH0r6VnMsUp7OfWlc",
+    maxResults: 100,
+    key: "AIzaSyBKrccQnCEd8W1DtFSP1r-NCIUjRrNLnpU",
+
+    //onBehalfOfContentOwner: "JKMGolf",
     //location: "CA",
-    channelId: "UC1p_2ubjLlYpMTM3LtSLwtg",
+    //channelId: "UC1p_2ubjLlYpMTM3LtSLwtg",
+    //channelId: "@JKMGolf",
   };
 
   constructor(searchOption?: youtubeSearch.YouTubeSearchOptions) {

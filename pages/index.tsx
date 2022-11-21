@@ -22,8 +22,19 @@ export default function Home() {
     }[]
   >([]);
   const search = async () => {
-    const filterRes = await youtube.filterFromLocal(query);
-    setResult(filterRes);
+    const result = await youtube.filterFromLocal(query);
+    setResult(result);
+    //let result: string[] = [];
+    //let list = await youtube.searchList(query);
+    // while (1) {
+    //   let list = await youtube.searchList(query);
+    //   if (list.length == 0) {
+    //     break;
+    //   }
+    //   const ids = list.map((item) => item.id);
+    //   result = result.concat(ids);
+    // }
+    //console.log(list);
   };
   const next = async () => {
     console.log("next test");
