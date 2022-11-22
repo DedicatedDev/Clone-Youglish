@@ -25,6 +25,7 @@ export default function Home() {
   >([]);
   const search = async () => {
     const result = await youtube.filterFromLocal(query);
+    
     const { results, errors } = await PromisePool.withConcurrency(10)
       .for(result)
       .process(async (video, index, pool) => {

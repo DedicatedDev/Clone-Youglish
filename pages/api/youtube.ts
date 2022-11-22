@@ -71,10 +71,24 @@ export class YoutubeManager {
       // Case insensitive
       "i"
     );
+
     const res = DB.map((item) => {
+      let curOffset = 0;
       return {
         id: item.id,
-        scripts: item.script.filter((item) => item.text.match(pattern)),
+        scripts: item.script.filter((line, index) => {
+          if (line.text.match(pattern)) {
+            if (index == 0) {
+              return true;
+            } else {
+              if ((line.offset - curOffset) / 1000 >= 30) {
+                curOffset = line.offset;
+                return true;
+              }
+            }
+          }
+          return false;
+        }),
       };
     });
     return res.flat();
