@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import PromisePool from "@supercharge/promise-pool/dist";
 import YoutubeTranscript from "./transcript";
 import DB from "../../data.json";
+import { Observable } from "rxjs";
 dotenv.config();
 export class YoutubeManager {
   private API_KEY: string = process.env.YOUTUBE_DATA3_API_KEY;
@@ -70,7 +71,6 @@ export class YoutubeManager {
       // Case insensitive
       "i"
     );
-    console.log(pattern);
     const res = DB.map((item) => {
       return {
         id: item.id,
@@ -78,5 +78,13 @@ export class YoutubeManager {
       };
     });
     return res.flat();
+  }
+  async getVideoData(ytId: string): Promise<string> {
+    const videoUrl = `https://www.youtube.com/watch?v=${ytId}`;
+    const res = await fetch(
+      `https://noembed.com/embed?dataType=json&url=${videoUrl}`
+    );
+    const data = await res.json();
+    return data.title.toString();
   }
 }

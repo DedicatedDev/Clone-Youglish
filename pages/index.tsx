@@ -7,6 +7,7 @@ import { YoutubeManager } from "./api/youtube";
 import PaginationBtn from "./components/buttons/pagination_btn";
 import YouTube from "react-youtube";
 import classnames from "classnames";
+import PromisePool from "@supercharge/promise-pool/dist";
 export default function Home() {
   const youtube = new YoutubeManager();
   const [query, setQuery] = useState<string>("");
@@ -14,6 +15,7 @@ export default function Home() {
   const [result, setResult] = useState<
     {
       id: string;
+      title: string;
       scripts: {
         text: string;
         duration: number;
@@ -23,7 +25,15 @@ export default function Home() {
   >([]);
   const search = async () => {
     const result = await youtube.filterFromLocal(query);
-    setResult(result);
+    const { results, errors } = await PromisePool.withConcurrency(10)
+      .for(result)
+      .process(async (video, index, pool) => {
+        const title = await youtube.getVideoData(video.id);
+        return { title: title, ...video };
+      });
+
+    setResult(results);
+
     //let result: string[] = [];
     //let list = await youtube.searchList(query);
     // while (1) {
@@ -87,8 +97,11 @@ export default function Home() {
                 return (
                   <div key={index} className="p-1 md:mt-10">
                     <div className="flex justify-between p-2 bg-slate-700">
-                      <p>VideoID:</p>
-                      <p className="ml-2">{item.id}</p>
+                      <p>{item.title}</p>
+                      <div className="flex">
+                        <p>VideoID:</p>
+                        <p className="ml-2">{item.id}</p>
+                      </div>
                     </div>
 
                     {item.scripts.map((script, index) => {
