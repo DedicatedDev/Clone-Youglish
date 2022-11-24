@@ -25,7 +25,7 @@ export default function Home() {
   >([]);
   const search = async () => {
     const result = await youtube.filterFromLocal(query);
-    
+
     const { results, errors } = await PromisePool.withConcurrency(10)
       .for(result)
       .process(async (video, index, pool) => {
@@ -58,7 +58,7 @@ export default function Home() {
       <div className="p-4 text-2xl font-semibold text-red-600">
         Youtube Clip Search
       </div>
-      <div className="flex items-center justify-center mt-20">
+      <div className="flex items-center justify-center mt-1">
         <input
           className="w-[60%] h-11 p-2"
           onChange={(e) => {
@@ -76,33 +76,34 @@ export default function Home() {
         <h1 className="font-bold ">
           Search Result {result.map((item) => item.scripts).flat().length}
         </h1>
-        <div className="flex justify-between w-full px-10 mt-10 lg:flex-row md:flex-col sm:flex-col">
-          <div className="flex justify-start mt-16 mr-20">
+        <div className="flex flex-col items-center justify-between w-full h-full px-10 mt-10 lg:items-start lg:flex-row">
+          <div className="mt-2 mr-8 youtubeContainer">
             <YouTube
               className={classnames(
                 result.map((item) => item.scripts).flat().length == 0
                   ? "hidden"
-                  : "block"
+                  : "block",
               )}
               id=""
               videoId={video?.id}
               opts={video?.opts}
+              // iframeClassName={"youtubeContainer"}
             />
           </div>
 
-          <div className="w-full">
+          <div className="w-full h-[400px] overflow-auto">
             {result.map((item, index) => {
               if (item.scripts.length == 0) {
                 return <></>;
               } else {
                 return (
-                  <div key={index} className="p-1 md:mt-10">
+                  <div key={index} className="p-1 md:mt-2">
                     <div className="flex justify-between p-2 bg-slate-700">
                       <p>{item.title}</p>
-                      <div className="flex">
+                      {/* <div className="flex">
                         <p>VideoID:</p>
                         <p className="ml-2">{item.id}</p>
-                      </div>
+                      </div> */}
                     </div>
 
                     {item.scripts.map((script, index) => {
@@ -121,7 +122,7 @@ export default function Home() {
                         //   </div>
                         // </Link>
                         <div
-                          className="flex justify-between px-5 py-2 bg-slate-800 active:bg-slate-400"
+                          className="flex justify-between px-5 py-2 bg-slate-800 active:bg-slate-400 hover:bg-slate-500"
                           key={index}
                           onClick={() => {
                             selectVideo({
@@ -129,7 +130,6 @@ export default function Home() {
                               opts: {
                                 playerVars: {
                                   autoplay: 1,
-                                  height: 300,
                                   start: script.offset / 1000, // begin playing the video at the given number of seconds from the start of the video
                                 },
                               },

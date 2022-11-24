@@ -10,7 +10,7 @@ export class YoutubeManager {
   private paginationInfo?: youtubeSearch.YouTubeSearchPageResults;
   private query: string = "";
   private searchOpts: youtubeSearch.YouTubeSearchOptions = {
-    maxResults: 100,
+    maxResults: 50,
     key: "AIzaSyBKrccQnCEd8W1DtFSP1r-NCIUjRrNLnpU",
 
     //onBehalfOfContentOwner: "JKMGolf",
@@ -99,6 +99,7 @@ export class YoutubeManager {
       `https://noembed.com/embed?dataType=json&url=${videoUrl}`
     );
     const data = await res.json();
+    console.log(data);
     return data.title.toString();
   }
 }
